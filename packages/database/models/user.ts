@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   pgTable,
   uuid,
@@ -5,8 +6,8 @@ import {
   timestamp,
   boolean,
   text,
-  integer
 } from "drizzle-orm/pg-core";
+import { formsTable } from "./form";
 
 export const usersTable = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -19,23 +20,12 @@ export const usersTable = pgTable("users", {
   profileImageUrl: text("profile_image_url"),
 
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+  updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
 });
 
-export const formsTable = pgTable("forms", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  title: varchar("title", { length: 80 }).notNull(),
-  description: varchar("title", { length: 80 }).notNull(),
-  slug: varchar("title", { length: 80 }).notNull(),
-  visibility: boolean(),
-  published: boolean(),
-  theme: varchar("theme", { length: 80 }).notNull(),
-  creatorId: integer("creator_id").references(() => usersTable.id),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date())
-})
-
-
+export const userRelations = relations(usersTable, ({ many }) => ({
+  forms: many(formsTable),
+}));
 
 export type SelectUser = typeof usersTable.$inferSelect;
 export type InsertUser = typeof usersTable.$inferInsert;
