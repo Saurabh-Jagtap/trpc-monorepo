@@ -2,12 +2,14 @@ import { router } from "./trpc";
 
 import { healthRouter } from "./routes/health/route";
 import { authRouter } from "./routes/auth/route";
-import { formRouter } from "./routes/form/routes";
+import { formRouter } from "./routes/form/route";
+import { formFieldRouter } from "./routes/form-field/route";
 
 export const serverRouter = router({
   health: healthRouter,
   auth: authRouter,
   forms: formRouter,
+  formFields: formFieldRouter,
 });
 
 export { createContext } from "./context";
