@@ -22,7 +22,7 @@ export const formsTable = pgTable("forms", {
     published: boolean("published").default(false).notNull(),
 
     theme: varchar("theme", { length: 80 }).default("default").notNull(),
-    creatorId: uuid("creator_id").notNull().references(() => usersTable.id),
+    creatorId: uuid("creator_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
 
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())

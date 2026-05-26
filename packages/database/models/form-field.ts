@@ -10,10 +10,10 @@ import {
 import { formsTable } from "./form";
 import { relations } from "drizzle-orm";
 
-export const formFieldsTable = pgTable("form_fields",{
+export const formFieldsTable = pgTable("form_fields", {
   id: uuid("id").primaryKey().defaultRandom(),
 
-  formId: uuid("form_id").notNull().references(()=> formsTable.id),
+  formId: uuid("form_id").notNull().references(() => formsTable.id, { onDelete: "cascade" }),
 
   // stable core columns
   type: varchar("type", { length: 20 }).notNull(),
@@ -30,11 +30,11 @@ export const formFieldsTable = pgTable("form_fields",{
 })
 
 
-export const formFieldRelations = relations(formFieldsTable, ({one}) => ({
-    form: one(formsTable,{
-        fields: [formFieldsTable.formId],
-        references: [formsTable.id]
-    })
+export const formFieldRelations = relations(formFieldsTable, ({ one }) => ({
+  form: one(formsTable, {
+    fields: [formFieldsTable.formId],
+    references: [formsTable.id]
+  })
 }))
 
 export type SelectFormField = typeof formFieldsTable.$inferSelect;

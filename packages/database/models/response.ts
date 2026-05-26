@@ -11,19 +11,19 @@ import { responseAnswersTable } from "./response-answer";
 export const responsesTable = pgTable("responses", {
   id: uuid("id").primaryKey().defaultRandom(),
 
-  formId: uuid("form_id").notNull().references(() => formsTable.id),
+  formId: uuid("form_id").notNull().references(() => formsTable.id, { onDelete: "cascade" }),
   respondentEmail: varchar("respondent_email", { length: 255 }),
 
   submittedAt: timestamp("submitted_at").defaultNow().notNull(),
 })
 
 
-export const responseRelations = relations(responsesTable, ({many, one}) =>({
-    form: one(formsTable, {
-        fields: [responsesTable.formId],
-        references: [formsTable.id]
-    }),
-    answers: many(responseAnswersTable)
+export const responseRelations = relations(responsesTable, ({ many, one }) => ({
+  form: one(formsTable, {
+    fields: [responsesTable.formId],
+    references: [formsTable.id]
+  }),
+  answers: many(responseAnswersTable)
 }))
 
 export type SelectResponse = typeof responsesTable.$inferSelect;

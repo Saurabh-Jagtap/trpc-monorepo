@@ -10,9 +10,9 @@ import { relations } from "drizzle-orm";
 
 export const responseAnswersTable = pgTable("response_answers", {
     id: uuid("id").primaryKey().defaultRandom(),
-    responseId: uuid("response_id").notNull().references(() => responsesTable.id),
+    responseId: uuid("response_id").notNull().references(() => responsesTable.id, { onDelete: "cascade" }),
 
-    fieldId: uuid("field_id").notNull().references(() => formFieldsTable.id),
+    fieldId: uuid("field_id").notNull().references(() => formFieldsTable.id, { onDelete: "cascade" }),
     value: text("value").notNull(),
 
     createdAt: timestamp("created_at").defaultNow().notNull(),
