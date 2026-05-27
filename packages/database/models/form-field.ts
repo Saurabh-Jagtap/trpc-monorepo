@@ -23,7 +23,12 @@ export const formFieldsTable = pgTable("form_fields", {
   order: integer("order").notNull(),
 
   // flexible metadata
-  config: jsonb("config").default({}).notNull(),
+  config: jsonb("config")
+    .$type<{
+      options?: string[] | number[]
+    }>()
+    .default({})
+    .notNull(),
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
